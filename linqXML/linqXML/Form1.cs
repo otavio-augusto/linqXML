@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -35,38 +29,44 @@ namespace linqXML
         public String pesquisaXML(String fileName, String query)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            foreach (XElement xelement in XElement.Load(fileName).Elements("marca"))
+            foreach (XElement xelement in XElement.Load(fileName).Elements("produto"))
             {
-                foreach (XElement xelement2 in xelement.Elements("produto"))
+                if (xelement.Attribute("nome").Value == query)
                 {
-                    if (xelement2.Attribute("nome").Value == query)
-                    {
-                        stringBuilder.AppendLine(xelement.Attribute("nome").Value);
-                        stringBuilder.AppendLine(xelement2.Attribute("id").Value);
-                        stringBuilder.AppendLine(xelement2.Attribute("nome").Value);
-                        stringBuilder.AppendLine(xelement2.Attribute("valor").Value);
-                        stringBuilder.AppendLine(xelement2.Attribute("quantidade").Value);
-                        break;
-                    }
-
+                    stringBuilder.AppendLine(xelement.Attribute("id").Value);
+                    stringBuilder.AppendLine(xelement.Attribute("nome").Value);
+                    stringBuilder.AppendLine(xelement.Attribute("marca").Value);
+                    stringBuilder.AppendLine(xelement.Attribute("valor").Value);
+                    stringBuilder.AppendLine(xelement.Attribute("quantidade").Value);
+                    break;
                 }
             }
             return stringBuilder.ToString();
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        public void escreveXML(String fileName, String element, string[] nome, string[] valor)
         {
-
+            object[] atributo = new object[nome.Length];
+            for (int i = 0; i < nome.Length; i++)
+            {
+                atributo[i] = new XAttribute(nome[i], valor[i]);
+            }
+            XElement xelement = new XElement("produto", atributo);
+            XDocument xDocument = XDocument.Load(fileName);
+            xDocument.Root.Add(xelement);
+            xDocument.Save(fileName);
+            MessageBox.Show(xelement.ToString());
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
-
-        private void Label3_Click(object sender, EventArgs e)
+        private void Button1_Click_1(object sender, EventArgs e)
         {
-
+            string[] nome = new string[] { "id", "nome", "valor", "quantidade" };
+            string[] valor = new string[] { textBox2.Text, textBox3.Text, textBox4.Text, textBox5.Text };
+            escreveXML("produto.xml", "root", nome, valor);
         }
     }
 }
