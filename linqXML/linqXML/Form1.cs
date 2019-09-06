@@ -39,10 +39,6 @@ namespace linqXML
                     querry = textBox4.Text;
                     field = "valor";
                     break;
-                case 4:
-                    querry = textBox5.Text;
-                    field = "quantidade";
-                    break;
             }
 
             string[] resultado = pesquisaXML("produto.xml", querry.ToString(), field).Split('\n');
@@ -53,7 +49,7 @@ namespace linqXML
                 textBox2.Text = resultado[1]; //ID
                 textBox3.Text = resultado[2]; //PRODUTO
                 textBox4.Text = resultado[3]; //VALOR
-                textBox5.Text = resultado[4]; //ESTOQUE
+                numericUpDown1.Value = Convert.ToDecimal(resultado[4]); //ESTOQUE
             }
         }
 
@@ -106,7 +102,7 @@ namespace linqXML
         private void Button1_Click_1(object sender, EventArgs e)
         {
             string[] nome = new string[] { "id", "nome", "marca", "valor", "quantidade" };
-            string[] valor = new string[] { textBox1.Text, textBox2.Text, textBox3.Text, textBox4.Text, textBox5.Text };
+            string[] valor = new string[] { textBox1.Text, textBox2.Text, textBox3.Text, textBox4.Text, numericUpDown1.Value.ToString() };
             escreveXML("produto.xml", "root", nome, valor);
             updateList();
         }
@@ -118,7 +114,7 @@ namespace linqXML
             textBox2.Text = resultado[1];
             textBox3.Text = resultado[2];
             textBox4.Text = resultado[3];
-            textBox5.Text = resultado[4];
+            numericUpDown1.Value = Convert.ToDecimal(resultado[4]);
         }
 
         public void updateList()
@@ -166,7 +162,12 @@ namespace linqXML
             textBox2.Clear();
             textBox3.Clear();
             textBox4.Clear();
-            textBox5.Clear();
+            numericUpDown1.Value = 0;
+        }
+
+        private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
